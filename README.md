@@ -1,1 +1,1 @@
-Shell I wrote the Radboud University Operating Systems Course
+Shell I wrote for the Radboud University Operating Systems Course
