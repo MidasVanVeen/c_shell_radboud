@@ -3,4 +3,4 @@ CC=clang
 INCLUDES=-Iinclude/
 
 all: $(FILES)
-	$(CC) $(FILES) -o shell -g
+	$(CC) $(FILES) $(INCLUDES) -o shell -g

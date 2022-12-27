@@ -5,7 +5,7 @@
  * Language: c
  */
 
-#include "../include/shell.h"
+#include "shell.h"
 
 int main(int argc, char **argv) {
   bool show_prompt = true;

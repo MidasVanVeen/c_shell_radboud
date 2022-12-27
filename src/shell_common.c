@@ -1,4 +1,4 @@
-#include "../include/shell_common.h"
+#include "shell_common.h"
 
 char *fix_filename(char *filename) {
   char first2[] = {filename[0], filename[1], '\0'};

@@ -1,4 +1,4 @@
-#include "../include/shell_internal.h"
+#include "shell_internal.h"
 
 /*
  * Function for checking for internal commands, if found, it calls the
