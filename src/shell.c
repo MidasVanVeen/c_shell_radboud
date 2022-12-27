@@ -54,13 +54,13 @@ static char **str_split(char *a_str, const char a_delim, int *size) {
     size_t idx = 0;
     char *token = strtok(a_str, delim);
     while (token) {
-	  if (!(idx < count))
-		  return NULL;
+      if (!(idx < count))
+        return NULL;
       *(result + idx++) = strdup(token);
       token = strtok(0, delim);
     }
-	if (idx != count - 1)
-	  return NULL;
+    if (idx != count - 1)
+      return NULL;
     *(result + idx) = 0;
   }
   return result;
@@ -76,8 +76,8 @@ static Cmd_t *parse_command(char *input) {
   cmd->numParts = 0;
   cmd->parts = str_split(input, ' ', &cmd->numParts);
   if (cmd->parts == NULL) {
-	fprintf(stderr, "Error parsing command\n");
-	return NULL;
+    fprintf(stderr, "Error parsing command\n");
+    return NULL;
   }
   cmd->parts[cmd->numParts] = NULL;
   if (pipe(cmd->pipe) != 0) {
@@ -97,12 +97,12 @@ static Expr_t parse_expression(char *input) {
   char **cmdStrings = 0;
   cmdStrings = str_split(input, '|', &expr.numCmds);
   if (cmdStrings == NULL) {
-	fprintf(stderr, "Error parsing expression\n");
-	return expr;
+    fprintf(stderr, "Error parsing expression\n");
+    return expr;
   }
   expr.cmd = parse_command(cmdStrings[0]);
   if (expr.cmd == NULL)
-	  return expr;
+    return expr;
   expr.valid = true;
   expr.cmd->parent_expr = &expr;
   expr.cmd->head = true;
@@ -208,12 +208,13 @@ static void execute_command(Cmd_t *cmd) {
  */
 static int execute_expression(Expr_t *expr) {
   if (expr->valid != true)
-	return EINVAL;
+    return EINVAL;
   if (expr->cmd == NULL)
     return EINVAL;
 
   int status;
-  if (expr->numCmds == 1 && handle_internal(expr->cmd) == NOT_INTERNAL) {
+  if (expr->numCmds == 1 &&
+      handle_internal(expr->cmd, &status) == NOT_INTERNAL) {
     if (fork() == 0) {
       if (expr->inputFromFile != NULL) {
         int fd = open(expr->inputFromFile, O_RDONLY);
@@ -262,6 +263,9 @@ int shell_loop(bool show_prompt) {
   while (fgets(line, 512, stdin)) {
     line[strcspn(line, "\n")] = 0;
     if (line[0] == 0) {
+      if (show_prompt) {
+        print_shell_prompt(status);
+      }
       continue;
     }
     Expr_t expr = parse_expression(line);
